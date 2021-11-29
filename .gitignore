@@ -8,6 +8,9 @@
 .cache
 .history
 .lib/
+.metals/
+.vscode/
+headers/
 dist/*
 target/
 lib_managed/
@@ -31,4 +34,3 @@ project/plugins/project/
 
 # python specific
 **/__pycache__
-

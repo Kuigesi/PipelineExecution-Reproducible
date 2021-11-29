@@ -20,6 +20,7 @@ trait DistributedTensor2MPI_NCCLComm extends DistributeTensor2MPI_NCCLBase {
   import CUDATypeLess._
   import NCCLTypeLess._
   import SIZE_TTypeLess._
+  import PrimitiveTypeLess._
 
   override def transform(n: Node): Backend.Exp = n match {
 
@@ -32,7 +33,37 @@ trait DistributedTensor2MPI_NCCLComm extends DistributeTensor2MPI_NCCLBase {
       NCCL_ALLREDUCE(m, inputArray, inputArray, SIZE_T(numeral(tt.shapeSize)), NCCL_SUM, myNCCLComm, myNCCLStream)
       CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
       inputArray.x
-
+    case Node(s, "tensor_send", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) => {
+      implicit val pos = Adapter.oldSourceMap(s)
+      val recvmodule = recvmap(tag)
+      val (dst_start, dst_size) = modulemap(recvmodule)
+      val (src_start, src_size) = modulemap(curModule)
+      assert(src_size == dst_size)
+      val send_tensor = new TENSOR(x, true)
+      val count = numeral(send_tensor.resultType.shapeSize)
+      val m = send_tensor.et
+      val peer = if (dst_start > src_start) globalNCCLRank + (dst_start - src_start)
+                 else globalNCCLRank - (src_start - dst_start)
+      NCCL_CHECK(NCCL_SEND(m, new ARRAY(transform(x)), SIZE_T(count), INT(peer), globalNCCLComm, myNCCLStream))
+      CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
+      Backend.Const(())
+    }
+    case Node(s, "tensor_recv", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) => {
+      implicit val pos = Adapter.oldSourceMap(s)
+      val sendmodule = sendmap(tag)
+      val (dst_start, dst_size) = modulemap(sendmodule)
+      val (src_start, src_size) = modulemap(curModule)
+      assert(src_size == dst_size)
+      val recv_tensor = new TENSOR(x, true)
+      val count = numeral(recv_tensor.resultType.shapeSize)
+      val m = recv_tensor.et
+      val peer = if (dst_start > src_start) globalNCCLRank + (dst_start - src_start)
+                 else globalNCCLRank - (src_start - dst_start)
+      // Will assert when x is of form TENSORARRAY.get
+      NCCL_CHECK(NCCL_RECV(m, new ARRAY(transform(x)), SIZE_T(count), INT(peer), globalNCCLComm, myNCCLStream))
+      CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
+      Backend.Const(())
+    }
     case _ => super.transform(n)
   }
 }
