@@ -264,6 +264,8 @@ abstract class DistributeTensorAIRCoP extends Transformer with DataStructure {
   def traverseWeights(weights: mutable.ArrayBuffer[Node])(cont: => Unit)(implicit module: MODULE) = {
     for (w <- weights) {
       traverse(w)
+      implicit val pos = Adapter.oldSourceMap(w.n)
+
       val new_weight = new TENSOR(transform(w.n))
       val (tt, anno) = (new_weight.resultType, new_weight.annotation)
       gradMap(w.n) = ZEROS(tt.map(_+"_grad"), anno)
