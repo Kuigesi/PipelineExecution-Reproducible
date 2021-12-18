@@ -65,9 +65,9 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
   // helper function for declaring a GPU array with random initialization
   def gpu_random_array(size: Int, m: Manifest[_], device: INT)(implicit __pos: SourceContext): ARRAY =
     withComment(s"initializing random GPU array of size $size and type $m at device (pre-rename) ${device.x}") {
-      val cpuArray = cpu_random_array(size, m)
+      //val cpuArray = cpu_random_array(size, m)
       val gpuArray = gpu_array(size, m, device)
-      CUDA_MEMCPY(gpuArray, cpuArray, size, HOST2DEVICE, m)
+      //CUDA_MEMCPY(gpuArray, cpuArray, size, HOST2DEVICE, m)
       gpuArray
     }
 
@@ -236,8 +236,10 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
   def set_up_mpi_nccl(implicit pos: SourceContext) = {
     val dummy = myNCCLSize
     setupCublasCudnn(pos)
+    //setup_profiler(pos)
   }
   def finalize_mpi_nccl(implicit pos: SourceContext) = {
+    //finalize_profiler(pos)
     ncclCheck(ncclCommDestroy(myNCCLCommRep))
     if (modulemap != null)
       ncclCheck(ncclCommDestroy(globalNCCLCommRep))
@@ -251,6 +253,16 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
   var modulemap:immutable.Map[Backend.Sym, (Int, Int)] = null
   var sendmap:immutable.Map[String, Backend.Sym] = null
   var recvmap:immutable.Map[String, Backend.Sym] = null
+  lazy val (start_event, stop_event) = {
+    val start = cudaEvent
+    val stop = cudaEvent
+    MPI_CHECK(mpi_barrier(mpi_comm_world))
+    cudaCall(cudaEventCreate(start))
+    cudaCall(cudaEventCreate(stop))
+    cudaCall(cudaEventRecord(start))
+    cudaProfilerStart()
+    (start, stop)
+  }
 
   def setupCublasCudnn(implicit pos: SourceContext): Unit = {
     if (hasCublas) set_up_cublas
@@ -261,6 +273,22 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
     if (hasCudnn) finalize_cudnn
   }
 
+  def setup_profiler(implicit pos: SourceContext):Unit = {
+    //cudaCall(cudaEventCreate(start_event))
+    //cudaCall(cudaEventCreate(stop_event))
+    //cudaCall(cudaEventRecord(start_event))
+    //cudaProfilerStart()
+    (start_event, stop_event)
+    ()
+  }
+  def finalize_profiler(implicit pos: SourceContext):Unit = {
+    cudaCall(cudaEventRecord(stop_event))
+    cudaCall(cudaEventSynchronize(stop_event))
+    cudaProfilerStop();
+    val time = var_new[Float](unit(0.0f))
+    cudaCall(cudaEventElapsedTime(time, start_event, stop_event))
+    printf("cuda event duration: %f\n", readVar(time));
+  }
   // lazy local function that initializes CUDNN
   lazy val (myCUDNNCommRep) = withComment("setting up the CUDNN environment") {
     val cudnn = cudnnHandle
@@ -292,24 +320,30 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
     cudnnConv2Desc = HashMap[Seq[Int], CUDNN_CONV_DESCRIPTOR]()
     cudnnActv2Desc = HashMap[(String, Float), CUDNN_ACTIVATION_DESCRIPTOR]()
     cudnnPool2Desc = HashMap[(String, Seq[Int]), CUDNN_POOLING_DESCRIPTOR]()
+    //mallocset.clear()
 
     super.traverse(ns, res)
 
+    //mallocset foreach {
+    //  CUDA_FREE(_)
+    //}
+    //mallocset.clear
+
     // clean up hashmaps for cudnn descriptors
-    cudnnTensor2Desc foreach {
-      case n@(_, (desc, "tensor")) => CUDNN_DESTROY_TENSOR_DESCRIPTOR(desc)
-      case n@(_, (desc, "filter")) => CUDNN_DESTROY_FILTER_DESCRIPTOR(desc)
-      case _ => throw new Exception("Unknown kind of cudnn tensor descriptor")
-    }
-    cudnnConv2Desc foreach {
-      case n@(_, desc) => CUDNN_DESTROY_CONV_DESCRIPTOR(desc)
-    }
-    cudnnActv2Desc foreach {
-      case (_, desc) => CUDNN_DESTROY_ACTIVATION_DESCRIPTOR(desc)
-    }
-    cudnnPool2Desc foreach {
-      case (_, desc) => CUDNN_DESTROY_POOLING_DESCRIPTOR(desc)
-    }
+    //cudnnTensor2Desc foreach {
+    //  case n@(_, (desc, "tensor")) => CUDNN_DESTROY_TENSOR_DESCRIPTOR(desc)
+    //  case n@(_, (desc, "filter")) => CUDNN_DESTROY_FILTER_DESCRIPTOR(desc)
+    //  case _ => throw new Exception("Unknown kind of cudnn tensor descriptor")
+    //}
+    //cudnnConv2Desc foreach {
+    //  case n@(_, desc) => CUDNN_DESTROY_CONV_DESCRIPTOR(desc)
+    //}
+    //cudnnActv2Desc foreach {
+    //  case (_, desc) => CUDNN_DESTROY_ACTIVATION_DESCRIPTOR(desc)
+    //}
+    //cudnnPool2Desc foreach {
+    //  case (_, desc) => CUDNN_DESTROY_POOLING_DESCRIPTOR(desc)
+    //}
     cudnnTensor2Desc = savedCudnnTensor2Desc
     cudnnConv2Desc = savedCudnnConv2Desc
     cudnnActv2Desc = savedCudnnActv2Desc

@@ -85,6 +85,7 @@ trait DistributeTensor2MPI_NCCLMutation extends DistributeTensor2MPI_NCCLBase {
         case "sum" => NCCL_SUM
         case a => throw new Exception(s"nccl mode $a is not yet handled")
       }
+      cudaStreamSynchronizeDefaultStream()
       NCCL_ALLREDUCE(sourceTensor.et, inputArray, inputArray, SIZE_T(count), nccl_mode, myNCCLComm, myNCCLStream)
       CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
       Backend.Const(())

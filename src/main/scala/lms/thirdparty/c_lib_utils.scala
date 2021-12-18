@@ -92,6 +92,10 @@ trait LibFunction extends Base {
     val defs = Seq(lms.core.Backend.Const(m), lms.core.Backend.Const(pkeys)) ++ rhs
     Wrap[T](Adapter.g.reflectEffect("lib-function", defs:_*)(readKeys: _*)(writeKeys: _*))
   }
+  def purelibFunction[T:Manifest](m:String, rhs:lms.core.Backend.Exp*)(rkeys:Seq[Int], wkeys:Seq[Int], pkeys:Set[Int], keys: lms.core.Backend.Exp*): Rep[T] = {
+    val defs = Seq(lms.core.Backend.Const(m), lms.core.Backend.Const(pkeys)) ++ rhs
+    Wrap[T](Adapter.g.reflectEffect("lib-function", defs:_*)()())
+  }
 }
 
 trait CCodeGenLibFunction extends ExtendedCCodeGen {

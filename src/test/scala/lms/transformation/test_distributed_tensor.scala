@@ -79,7 +79,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("dot", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("dot", driver.code, "cu", driver.setLogPath)
   }
 
   test("invert") {
@@ -320,7 +320,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("softmax", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("softmax", driver.code, "cu", driver.setLogPath)
   }
 
   test("sigmoid") { // passed
@@ -339,7 +339,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("sigmoid", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("sigmoid", driver.code, "cu", driver.setLogPath)
   }
 
   test("elu") { // passed
@@ -358,7 +358,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("elu", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("elu", driver.code, "cu", driver.setLogPath)
   }
 
   test("dropout") { // passed
@@ -380,7 +380,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("dropout", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("dropout", driver.code, "cu", driver.setLogPath)
   }
 
   test("maxpool") { // passed
@@ -400,7 +400,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("maxpool", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("maxpool", driver.code, "cu", driver.setLogPath)
   }
 
   test("avgpool") { // passed
@@ -420,7 +420,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("avgpool", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("avgpool", driver.code, "cu", driver.setLogPath)
   }
 
   test("conv") {
@@ -440,7 +440,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("conv", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("conv", driver.code, "cu", driver.setLogPath)
   }
 
   test("conv_train") {
@@ -460,7 +460,7 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.train(10); ()
       }
     }
-    checkWithLogPath("conv_train", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("conv_train", driver.code, "cu", driver.setLogPath)
   }
 
   test("masked_fill") { // passed
@@ -591,6 +591,6 @@ class FixedSizeDistributedTensorTest extends TutorialFunSuite {
         model.test("loss"); ()
       }
     }
-    checkWithLogPath("embedding", driver.code, "cu", driver.setLogPath)
+    //checkWithLogPath("embedding", driver.code, "cu", driver.setLogPath)
   }
 }

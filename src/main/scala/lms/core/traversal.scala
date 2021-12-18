@@ -481,7 +481,7 @@ abstract class Transformer extends Traverser {
 
   def transform(s: Exp): Exp = s match {
     case s @ Sym(_) if subst contains s => subst(s)
-    case s @ Sym(_) => println(s"Warning: not found in subst $subst: "+s); s
+    case s @ Sym(_) => println(s"Warning: not found in subst : "+s); s
     case a => a // must be const
   }
 
@@ -491,17 +491,126 @@ abstract class Transformer extends Traverser {
         //subst(block) = g.effectToExp(g.curBlock) //XXX
         traverse(b); transform(res)
       }
-    case b @ Block(arg::Nil, res, block, eff) =>
-      g.reify { e =>
-        if (subst contains arg)
-          println(s"Warning: already have a subst for $arg")
-        try {
-          subst(arg) = e
-          //subst(block) = g.effectToExp(g.curBlock) //XXX
-          traverse(b)
-          transform(res)
-        } finally subst -= arg
-      }
+    case b @ Block(args, res, block, eff) =>
+      g.reify(args.size, {
+        xs =>
+          if (xs.size != args.size)
+            ???
+          for (arg <- args)
+            if (subst contains arg)
+              println(s"Warning: already have a subst for $arg")
+          try {
+            for (i <- 0 until args.size)
+              subst(args(i)) = xs(i)
+            //subst(block) = g.effectToExp(g.curBlock) //XXX
+            traverse(b)
+            transform(res)
+          } finally {
+            for (i <- 0 until args.size) {
+              subst -= args(i)
+              if (Adapter.oldTypeMap.contains(args(i)))
+                Adapter.typeMap.getOrElseUpdate(xs(i), Adapter.oldTypeMap(args(i)))
+            }
+          }
+      })
+    //case b @ Block(arg::Nil, res, block, eff) =>
+    //  g.reify { e =>
+    //    if (subst contains arg)
+    //      println(s"Warning: already have a subst for $arg")
+    //    try {
+    //      subst(arg) = e
+    //      //subst(block) = g.effectToExp(g.curBlock) //XXX
+    //      traverse(b)
+    //      transform(res)
+    //    } finally {
+    //      subst -= arg
+    //      if (Adapter.oldTypeMap.contains(arg))
+    //        Adapter.typeMap.getOrElseUpdate(e, Adapter.oldTypeMap(arg))
+    //    }
+    //  }
+    //case b @ Block(arg1::arg2::Nil, res, block, eff) =>
+    //  g.reify { (e1, e2) =>
+    //    if (subst contains arg1)
+    //      println(s"Warning: already have a subst for $arg1")
+    //    if (subst contains arg2)
+    //      println(s"Warning: already have a subst for $arg2")
+    //    try {
+    //      subst(arg1) = e1
+    //      subst(arg2) = e2
+    //      //subst(block) = g.effectToExp(g.curBlock) //XXX
+    //      traverse(b)
+    //      transform(res)
+    //    } finally{
+    //      subst -= arg1
+    //      subst -= arg2
+    //      if (Adapter.oldTypeMap.contains(arg1))
+    //        Adapter.typeMap.getOrElseUpdate(e1, Adapter.oldTypeMap(arg1))
+    //      if (Adapter.oldTypeMap.contains(arg2))
+    //        Adapter.typeMap.getOrElseUpdate(e2, Adapter.oldTypeMap(arg2))
+    //    }
+    //  }
+    //case b @ Block(arg1::arg2::arg3::Nil, res, block, eff) =>
+    //  print("\n\n****reify 3 argument function:"+b+"\n")
+    //  print("x148's new sym:"+ subst(Sym(148))+"\n")
+    //  g.reify { (e1, e2, e3) =>
+    //    if (subst contains arg1)
+    //      println(s"Warning: already have a subst for $arg1")
+    //    if (subst contains arg2)
+    //      println(s"Warning: already have a subst for $arg2")
+    //    if (subst contains arg3)
+    //      println(s"Warning: already have a subst for $arg3")
+    //    try {
+    //      subst(arg1) = e1
+    //      subst(arg2) = e2
+    //      subst(arg3) = e3
+    //      //subst(block) = g.effectToExp(g.curBlock) //XXX
+    //      traverse(b)
+    //      transform(res)
+    //    } finally {
+    //      subst -= arg1
+    //      subst -= arg2
+    //      subst -= arg3
+    //      if (Adapter.oldTypeMap.contains(arg1))
+    //        Adapter.typeMap.getOrElseUpdate(e1, Adapter.oldTypeMap(arg1))
+    //      if (Adapter.oldTypeMap.contains(arg2))
+    //        Adapter.typeMap.getOrElseUpdate(e2, Adapter.oldTypeMap(arg2))
+    //      if (Adapter.oldTypeMap.contains(arg3))
+    //        Adapter.typeMap.getOrElseUpdate(e3, Adapter.oldTypeMap(arg3))
+    //    }
+    //  }
+    //case b @ Block(arg1::arg2::arg3::arg4::Nil, res, block, eff) =>
+    //  g.reify { (e1, e2, e3, e4) =>
+    //    if (subst contains arg1)
+    //      println(s"Warning: already have a subst for $arg1")
+    //    if (subst contains arg2)
+    //      println(s"Warning: already have a subst for $arg2")
+    //    if (subst contains arg3)
+    //      println(s"Warning: already have a subst for $arg3")
+    //    if (subst contains arg4)
+    //      println(s"Warning: already have a subst for $arg4")
+    //    try {
+    //      subst(arg1) = e1
+    //      subst(arg2) = e2
+    //      subst(arg3) = e3
+    //      subst(arg4) = e4
+    //      //subst(block) = g.effectToExp(g.curBlock) //XXX
+    //      traverse(b)
+    //      transform(res)
+    //    } finally {
+    //      subst -= arg1
+    //      subst -= arg2
+    //      subst -= arg3
+    //      subst -= arg4
+    //      if (Adapter.oldTypeMap.contains(arg1))
+    //        Adapter.typeMap.getOrElseUpdate(e1, Adapter.oldTypeMap(arg1))
+    //      if (Adapter.oldTypeMap.contains(arg2))
+    //        Adapter.typeMap.getOrElseUpdate(e2, Adapter.oldTypeMap(arg2))
+    //      if (Adapter.oldTypeMap.contains(arg3))
+    //        Adapter.typeMap.getOrElseUpdate(e3, Adapter.oldTypeMap(arg3))
+    //      if (Adapter.oldTypeMap.contains(arg4))
+    //        Adapter.typeMap.getOrElseUpdate(e4, Adapter.oldTypeMap(arg4))
+    //    }
+    //  }
     case _ => ???
   }
 
@@ -514,9 +623,15 @@ abstract class Transformer extends Traverser {
   def transform(n: Node): Exp = n match {
     case Node(s, "λ", (b @ Block(in, y, ein, eff))::rest, _) =>
       // need to deal with recursive binding!
+      if (subst contains s) subst(s)
+      else {
       val s1 = Sym(g.fresh)
       subst(s) = s1
-      g.reflect(s1, "λ", (transform(b)+:transformRHS(rest)):_*)()
+      //print("\n\ntransform function:"+n+"\n")
+      val x = g.reflect(s1, "λ", (transform(b)+:transformRHS(rest)):_*)()
+      subst(s) = s1
+      x
+      }
     case Node(s,op,rs,es) =>
       // effect dependencies in target graph are managed by
       // graph builder, so we drop all effects here

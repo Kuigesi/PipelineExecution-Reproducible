@@ -146,8 +146,8 @@ void Snippet(int x0) {
         CUDA_CALL(cudaMalloc(&x57, (size_t)(512 * sizeof(float))));
         x29<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x56, x18, x57, 512);
         // end computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x172 and right_operand x77
+        cudaStreamSynchronize(0);
         NCCLCHECK(ncclSend(x57, (size_t)512, ncclFloat32, x37, x4, x6));
-        CUDA_CALL(cudaStreamSynchronize(x6));
         x54 = x54 + 1;
       }
       int x58 = 0;
@@ -160,16 +160,16 @@ void Snippet(int x0) {
         // end initializing fixed GPU array of size 512 and type Float and device (pre-rename) x66
         NCCLCHECK(ncclRecv(x59, (size_t)512, ncclFloat32, x37, x4, x6));
         CUDA_CALL(cudaStreamSynchronize(x6));
-        // begin computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x256 and right_operand x260
+        // begin computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x255 and right_operand x259
         CUDA_CALL(cudaSetDevice(x15));
         float* x60 = (float*)malloc(0 * sizeof(float));
         CUDA_CALL(cudaMalloc(&x60, (size_t)(512 * sizeof(float))));
         x29<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x27 + 512 * x58, x59, x60, 512);
-        // end computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x256 and right_operand x260
-        // begin computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x94 and addition_operand x279
+        // end computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x255 and right_operand x259
+        // begin computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x94 and addition_operand x278
         CUDA_CALL(cudaSetDevice(x15));
         x38<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x19, x60, 512);
-        // end computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x94 and addition_operand x279
+        // end computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x94 and addition_operand x278
         x58 = x58 + 1;
       }
       // begin computing SGD on GPU for size 512 and type Float at device (pre-name) x66 with weight x77, grad x94, and momentum x134
@@ -243,18 +243,18 @@ void Snippet(int x0) {
         CUDA_CALL(cudaMalloc(&x74, (size_t)(512 * sizeof(float))));
         x20<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x74, 1, 512);
         // end initializing fixed GPU array of size 512 and type Float and device (pre-rename) x66
-        // begin computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x517 and right_operand x521
+        // begin computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x516 and right_operand x520
         CUDA_CALL(cudaSetDevice(x15));
         float* x75 = (float*)malloc(0 * sizeof(float));
         CUDA_CALL(cudaMalloc(&x75, (size_t)(512 * sizeof(float))));
         x29<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x64 + 512 * x72, x74, x75, 512);
-        // end computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x517 and right_operand x521
-        // begin computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x506 and addition_operand x534
+        // end computing MULT on GPU for size 512 and type Float at device (pre-rename) x66 with left_operand x516 and right_operand x520
+        // begin computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x505 and addition_operand x533
         CUDA_CALL(cudaSetDevice(x15));
         x38<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x73, x75, 512);
-        // end computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x506 and addition_operand x534
+        // end computing ACCUM on GPU for size 512 and type Float at device (pre-rename) x66 with base_operand x505 and addition_operand x533
+        cudaStreamSynchronize(0);
         NCCLCHECK(ncclSend(x73, (size_t)512, ncclFloat32, x66, x4, x6));
-        CUDA_CALL(cudaStreamSynchronize(x6));
         x72 = x72 + 1;
       }
       x65 = x65 + 1;

@@ -72,7 +72,7 @@ abstract class DistributeTensorAIRCoP extends Transformer with DataStructure {
       (() => {
         val result = new TENSOR(transform(module.result.x))
         // FIXME(feiw) this should not be check, but be log.
-        result.check("loss")
+        //result.check("loss")
         val grad = ONES(result.resultType, result.annotation)
         gradMap(module.result.x) = grad
       }) +=: backwardNodes
@@ -80,7 +80,7 @@ abstract class DistributeTensorAIRCoP extends Transformer with DataStructure {
       (() => {
         val result = new TENSOR(transform(module.result.x))
         // FIXME(feiw) this should not be check, but be log.
-        result.check("loss")
+        //result.check("loss")
         val grad = ZEROS(result.resultType, result.annotation)
         val recv =  RECV(grad, module.result.x.toString, true)
         //Accumulate(grad, recv, result.annotation);
@@ -97,14 +97,14 @@ abstract class DistributeTensorAIRCoP extends Transformer with DataStructure {
       for (i <- (0 until iter): Rep[Range]) {
         traverseForward(forwardNodes) {
           traverseBackward(backwardNodes, forwardSyms) {
-            traverseOptimization(weightSyms) { () => () }
+            traverseOptimization(weightSyms) { checkGradients(weightSyms, true) }
           }
         }
       }
     }
     // FIXME(feiw) change res to updated weights
-    val updated_weights = weightSyms.map(w => subst(w)).toList
-    updated_weights.foreach(w => (new TENSOR(w)).save)
+    //val updated_weights = weightSyms.map(w => subst(w)).toList
+    //updated_weights.foreach(w => (new TENSOR(w)).save)
     Backend.Const(())
   }
 
@@ -324,7 +324,8 @@ abstract class DistributeTensorAIRCoP extends Transformer with DataStructure {
           if (check_weight)
             weight.check(name, args:_*)
         }
-        case (None, _) => throw new Exception(s"Missing checked file names for tensor $weight")
+        case (None, _) => ()
+        //case (None, _) => throw new Exception(s"Missing checked file names for tensor $weight")
       }
     }
   }

@@ -45,7 +45,7 @@ trait FixedSizeDistributedTensorMutationTypeLess extends FixedSizeDistributedTen
 
     def set(x: TENSORARRAY, i: INT, y: TENSOR)(implicit __pos: SourceContext):UNIT = {
       assert(x.annotation == y.annotation)
-      assert(x.resultType == y.resultType)
+      assert(x.resultType.shapeSize == y.resultType.shapeSize)
       UNIT(Adapter.g.reflectEffect("tensor_array_set", C(x.resultType), C(x.annotation), x.x, i.x, y.x)(x.x, i.x, y.x)(x.x))
     }
 
@@ -67,7 +67,7 @@ trait FixedSizeDistributedTensorMutationTypeLess extends FixedSizeDistributedTen
   }
 
   def Optimize(x: TENSOR, grad: TENSOR, momentum: TENSOR, anno: Anno = NAnno)(implicit __pos: SourceContext): UNIT = {
-    UNIT(Adapter.g.reflectEffect("optimize_tensor", C(anno), x.x, grad.x, momentum.x)(x.x, grad.x, momentum.x)(x.x))
+    UNIT(Adapter.g.reflectEffect("optimize_tensor", C(anno), x.x, grad.x, momentum.x)(x.x, grad.x, momentum.x)(x.x, Adapter.CTRL))
   }
 
   def AllReduceInPlace(x: TENSOR, devices: Seq[Device], mode: String)(implicit __pos: SourceContext): UNIT = {

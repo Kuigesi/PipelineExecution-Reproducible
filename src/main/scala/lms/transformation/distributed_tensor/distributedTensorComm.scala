@@ -21,7 +21,7 @@ trait FixedSizeDistributedTensorCommTypeLess extends FixedSizeDistributedTensorB
 
   def RECV(tensor: TENSOR, str:String, gflag:Boolean = false)(implicit __pos: SourceContext): TENSOR = {
     val tag = if (gflag) str + "'" else str
-    (new TENSOR(Adapter.g.reflectWrite("tensor_recv", C(tensor.resultType), C(tensor.annotation), C(tag), tensor.x)(tensor.x))).withSrcType(__pos, tensor.et)
+    (new TENSOR(Adapter.g.reflectWrite("tensor_recv", C(tensor.resultType), C(tensor.annotation), C(tag), tensor.x)(tensor.x, Adapter.CTRL))).withSrcType(__pos, tensor.et)
   }
 
   def AllReduce(tensor: TENSOR)(implicit __pos: SourceContext): TENSOR = {
@@ -66,10 +66,10 @@ trait FixedSizeDistributedTensorCommTypeLess extends FixedSizeDistributedTensorB
   override def printTensor(node: Node, graph: Graph): String = node match {
     case Node(s, "tensor_allreduce", Backend.Const(tt:TensorType)::Backend.Const(anno:Anno)::(a:Backend.Sym)::_, _) =>
       s"$s = tensor_allreduce($a) (${symTensorShape(a, graph)})->${tt.toString}${if (anno != NAnno) s"\nAnno: $anno" else ""}"
-    case Node(s, "tensor_send", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::_, _) =>
-      s"$s = tensor_send() -> ${tt.toString}${if (anno != NAnno) s"  Anno: $anno" else ""}  Tag: $tag"
-    case Node(s, "tensor_recv", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::_, _) =>
-      s"$s = tensor_recv() -> ${tt.toString}${if (anno != NAnno) s"  Anno: $anno" else ""}  Tag: $tag"
+    case Node(s, "tensor_send", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) =>
+      s"$s = tensor_send() -> tensor: ${x} ${tt.toString}${if (anno != NAnno) s"  Anno: $anno" else ""}  Tag: $tag"
+    case Node(s, "tensor_recv", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) =>
+      s"$s = tensor_recv() -> tensor: ${x} ${tt.toString}${if (anno != NAnno) s"  Anno: $anno" else ""}  Tag: $tag"
     case _ => super.printTensor(node, graph)
   }
 }

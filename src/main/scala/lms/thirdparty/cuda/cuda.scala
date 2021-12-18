@@ -11,6 +11,8 @@ import lms.collection.mutable.{ArrayOps, ArrayTypeLess, StackArrayOps}
 import lms.transformation.tensor.FixedSizeTensorDeviceTypeLess
 import lms.thirdparty.{CCodeGenLibs, CCodeGenSizeTOps, CLibTypeLess, CLibs, SIZE_TTypeLess, SizeTOps}
 
+import scala.collection.{immutable, mutable}
+
 
 object CUDATypeLess extends Dsl with StackArrayOps with CLibs with CudaFunction {
   import BaseTypeLess._
@@ -21,6 +23,8 @@ object CUDATypeLess extends Dsl with StackArrayOps with CLibs with CudaFunction 
   import SIZE_TTypeLess._
   import RangeTypeLess._
 
+  // val mallocset = new mutable.ArrayBuffer[ARRAY]
+
   // FIXME(feiw) hacky temp status type (used to be CudaErrorT)
   def CUDA_CALL(status: Backend.Exp) =
     libFunction[Unit]("CUDA_CALL", status)(Seq[Int](0), Seq[Int](), Set[Int](), Adapter.CTRL)
@@ -28,13 +32,17 @@ object CUDATypeLess extends Dsl with StackArrayOps with CLibs with CudaFunction 
   // a typeless interface for CUDA_MALLOC
   def CUDA_MALLOC(count: INT, m: Manifest[_])(implicit __pos: SourceContext): ARRAY = {
     val addr = ARRAY(0, m)
+    //val addr = (new ARRAY(Adapter.g.reflectEffect("NewArray", Backend.Const(0))()())).withSrcType(__pos, m.arrayManifest)
     CUDA_CALL(Unwrap(libFunction[Any]("cudaMalloc", addr.x, SIZE_T(count * SIZE_OF(m)).x)(Seq(1), Seq(0), Set(0))))
+    //mallocset += addr
     addr
   }
 
   def CUDA_MALLOC_BYTES(count: INT, m: Manifest[_])(implicit __pos: SourceContext): ARRAY = {
     val addr = ARRAY(0, m)
+    //val addr = (new ARRAY(Adapter.g.reflectEffect("NewArray", Backend.Const(0))()())).withSrcType(__pos, m.arrayManifest)
     CUDA_CALL(Unwrap(libFunction[Any]("cudaMalloc", addr.x, SIZE_T(count).x)(Seq(1), Seq(0), Set(0))))
+    //mallocset += addr
     addr
   }
 
@@ -509,6 +517,27 @@ trait CudaOps extends Dsl with StackArrayOps with SizeTOps with CLibs with CudaF
   def cudaSetDevice(device: Rep[Int]) =
     libFunction[CudaErrorT]("cudaSetDevice", Unwrap(device))(Seq[Int](), Seq[Int](), Set[Int](), Adapter.CTRL)
 
+  //class cudaEventT
+  //def cudaEvent: Rep[cudaEventT] = newStruct[cudaEventT]("cudaEvent_t")
+//
+  //def cudaEventCreate(event: Rep[cudaEventT]) =
+  //  libFunction[CudaErrorT]("cudaEventCreate", Unwrap(event))(Seq(0), Seq(0), Set(0))
+//
+  //def cudaEventRecord(event: Rep[cudaEventT]) =
+  //  libFunction[CudaErrorT]("cudaEventRecord", Unwrap(event))(Seq(0), Seq[Int](), Set[Int]())
+//
+  //def cudaEventSynchronize(event: Rep[cudaEventT]) =
+  //  libFunction[CudaErrorT]("cudaEventSynchronize", Unwrap(event))(Seq(0), Seq[Int](), Set[Int]())
+//
+  //def cudaEventElapsedTime(time:Rep[Float], start: Rep[cudaEventT], stop: Rep[cudaEventT]) =
+  //  libFunction[CudaErrorT]("cudaEventElapsedTime", Unwrap(time), Unwrap(start), Unwrap(stop))(Seq(0,1,2), Seq(0), Set(0))
+
+  def cudaProfilerStart() =
+    libFunction[Unit]("cudaProfilerStart")(Seq[Int](), Seq[Int](), Set[Int](), Adapter.CTRL)
+
+  def cudaProfilerStop() =
+    libFunction[Unit]("cudaProfilerStop")(Seq[Int](), Seq[Int](), Set[Int](), Adapter.CTRL)
+
   class cudaStreamT
   def cudaStream: Rep[cudaStreamT] = newStruct[cudaStreamT]("cudaStream_t")
 
@@ -526,6 +555,8 @@ trait CudaOps extends Dsl with StackArrayOps with SizeTOps with CLibs with CudaF
   // __host__ ​cudaError_t cudaStreamSynchronize ( cudaStream_t stream ) // Waits for stream tasks to complete.
   def cudaStreamSynchronize(stream: Rep[cudaStreamT]) =
     libFunction[CudaErrorT]("cudaStreamSynchronize", Unwrap(stream))(Seq(0), Seq(0), Set[Int]())
+  def cudaStreamSynchronizeDefaultStream() =
+    libFunction[CudaErrorT]("cudaStreamSynchronize", Backend.Const(0))(Seq(0), Seq(0), Set[Int]())
 
 
   // cudaGetDeviceCount(&deviceCount)
@@ -1860,6 +1891,7 @@ trait CudaLibs extends CudaOps {
 trait CCodeGenCudaOps extends CCodeGenSizeTOps with CudaCodeGenLibFunction with CCodeGenLibs {
   // need to register the headers
   registerHeader("\"cuda_header.h\"")
+  //registerHeader("\"cuda_profiler_api.h\"")
 
   override def mayInline(n: Node): Boolean = n match {
     case Node(s, "NewSharedArray", _, _) => false

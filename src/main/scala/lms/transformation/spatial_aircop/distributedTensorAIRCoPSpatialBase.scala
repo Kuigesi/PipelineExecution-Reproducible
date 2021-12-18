@@ -85,9 +85,9 @@ abstract class DistributeTensorAIRCoPSpatialBase extends Transformer with MPIOps
         case SAnno(dim: Dim, devices: Seq[Device], _) =>
           // FIXME(feiw) how do we know which rank should have this weight?
           val weight = WEIGHT(tt.splitBy(anno), NAnno)
-          if (!tt.contains(dim)) {
-            AllReduceInPlace(weight, devices, mode="mean")
-          }
+          //if (!tt.contains(dim)) {
+          //  AllReduceInPlace(weight, devices, mode="mean")
+          //}
           weight.x
         case a => throw new Exception(s"annotation $a is not yet handled in tensor_weight")
       }
@@ -121,9 +121,9 @@ abstract class DistributeTensorAIRCoPSpatialBase extends Transformer with MPIOps
         case SAnno(dim: Dim, devices: Seq[Device], _) =>
           // FIXME(feiw) how do we know which rank should have this input?
           val input = INPUT(tt.splitBy(anno), NAnno)
-          if (!tt.contains(dim)) {
-            AllReduceInPlace(input, devices, mode="mean")
-          }
+          //if (!tt.contains(dim)) {
+          //  AllReduceInPlace(input, devices, mode="mean")
+          //}
           input.x
         case a => throw new Exception(s"annotation $a is not yet handled in tensor_input")
       }
@@ -203,6 +203,7 @@ abstract class DistributeTensorAIRCoPSpatialBase extends Transformer with MPIOps
     Adapter.g = g
 
     try {
+      //print(graph.nodes)
       super.transform(graph)
     } finally {
       g = null; Adapter.g = null

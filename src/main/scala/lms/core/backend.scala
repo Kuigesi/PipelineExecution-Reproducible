@@ -151,6 +151,7 @@ class GraphBuilder {
   val globalDefs = new mutable.ArrayBuffer[Node]
   val globalDefsCache = new mutable.HashMap[Sym,Node]
   val globalDefsReverseCache = new mutable.HashMap[(String,Seq[Def]),Node]
+  val moduleTensorMap = new mutable.HashMap[Sym,Exp]
 
   var nSyms = 0
   def fresh = try nSyms finally nSyms += 1

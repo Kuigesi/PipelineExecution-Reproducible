@@ -129,8 +129,6 @@ trait FixedSizeDistributedTensorBaseTypeLess {
     new MODULE(Adapter.g.reflectWrite("module", C(anno), Adapter.g.reify(f.x))(Adapter.CTRL)).withSource(__pos)
   }
 
-  val moduleTensorMap = new mutable.HashMap[Backend.Sym, TENSOR]
-
   class MODULE(override val x: Backend.Exp, override val useOldMetadata: Boolean = false) extends TOP(x, useOldMetadata) {
     def withEleType(m: Manifest[_]): this.type = { Adapter.typeMap(x) = m; this }
     override def withSrcType(pos: SourceContext, m: Manifest[_]): this.type =
@@ -173,17 +171,19 @@ trait FixedSizeDistributedTensorBaseTypeLess {
 
     def getTensor(anno: Anno)(implicit __pos: SourceContext) = {
       val rt = result.resultType
-      moduleTensorMap.getOrElse(x.asInstanceOf[Backend.Sym], new TENSOR(Adapter.g.reflectRead("tensor_module", C(rt), C(anno), x)(x)).withSrcType(__pos, rt.et))
+      anno match {
+        case SAnno(dim: Dim, devices: Seq[Device], _) => new TENSOR(Adapter.g.moduleTensorMap.getOrElseUpdate(x.asInstanceOf[Backend.Sym], Adapter.g.reflectRead("tensor_module", C(rt), C(anno), x)(x))).withSrcType(__pos, rt.et)
+        case NAnno => new TENSOR(Adapter.g.reflectRead("tensor_module", C(rt), C(result.annotation), x)(x)).withSrcType(__pos, rt.et)
+        case _ => ???
+      }
     }
   }
 
   object MODULE {
     def TENSORMODULE(m:Backend.Exp, anno: Anno)(implicit __pos: SourceContext): TENSOR = {
       // Fixme: need to create new tensortype with new dims?
-      val resTensor = new MODULE(m).result
+       new MODULE(m).getTensor(anno)
       // val rt: TensorType = TensorType(resTensor.resultType.shape.map(s => Size(dim, s.size)), resTensor.resultType.et)
-      val rt = resTensor.resultType
-      moduleTensorMap.getOrElse(m.asInstanceOf[Backend.Sym], new TENSOR(Adapter.g.reflectRead("tensor_module", C(rt), C(anno), m)(m)).withSrcType(__pos, rt.et))
     }
 
     def getModuleTensor(x: Backend.Exp, useOldMetadata: Boolean = false) = {
@@ -389,6 +389,9 @@ trait FixedSizeDistributedTensorOpsBase extends Dsl {
     val anno: Anno = self.annotation
     def train(iter: Int)(implicit __pos: SourceContext): Rep[Unit] = Wrap[Unit](self.train(iter).x)
     def test(lossName: String = "loss")(implicit __pos: SourceContext): Rep[Unit] = Wrap[Unit](self.test(lossName).x)
+    def recv(anno: Anno)( implicit __pos: SourceContext) : Rep[Tensor[T]] = {
+      Wrap[Tensor[T]](module(x).getTensor(anno).x)
+    }
   }
 
   /// Typed Frontend

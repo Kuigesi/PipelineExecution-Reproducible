@@ -30,6 +30,7 @@ trait DistributedTensor2MPI_NCCLComm extends DistributeTensor2MPI_NCCLBase {
       val inputArray = new ARRAY(transform(input))
       val count = numeral(tt.shapeSize)
       val m = (new TENSOR(input, useOldMetadata=true)).et
+      cudaStreamSynchronizeDefaultStream()
       NCCL_ALLREDUCE(m, inputArray, inputArray, SIZE_T(numeral(tt.shapeSize)), NCCL_SUM, myNCCLComm, myNCCLStream)
       CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
       inputArray.x
@@ -44,8 +45,9 @@ trait DistributedTensor2MPI_NCCLComm extends DistributeTensor2MPI_NCCLBase {
       val m = send_tensor.et
       val peer = if (dst_start > src_start) globalNCCLRank + (dst_start - src_start)
                  else globalNCCLRank - (src_start - dst_start)
+      cudaStreamSynchronizeDefaultStream()
       NCCL_CHECK(NCCL_SEND(m, new ARRAY(transform(x)), SIZE_T(count), INT(peer), globalNCCLComm, myNCCLStream))
-      CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
+      //CUDA_STREAM_SYNCHRONIZE(myNCCLStream)
       Backend.Const(())
     }
     case Node(s, "tensor_recv", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) => {
