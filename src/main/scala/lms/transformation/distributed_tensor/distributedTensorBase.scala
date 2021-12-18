@@ -79,13 +79,13 @@ trait FixedSizeDistributedTensorBaseTypeLess {
   case class SAnno(dim: Dim, devices: Seq[Device], stable: Boolean = true) extends Anno {
     override def toString = s"Split d${dim.x} at devices=[${devices.mkString(", ")}]"
   }
-  case class MAnno(devices: Seq[Device], lastmodule: Boolean = false) extends Anno {
+  case class MAnno(devices: Seq[Device], islastmodule: Boolean = false) extends Anno {
     override def toString = s"Non-pipeline module at devices=[${devices.mkString(", ")}]"
   } // non pipeline multiple modules
-  case class KAnno(pipeline: Int, devices: Seq[Device], lastmodule: Boolean = false) extends Anno {
+  case class KAnno(pipeline: Int, devices: Seq[Device], islastmodule: Boolean = false) extends Anno {
     override def toString = s"Stacked pipeline at ${pipeline} at devices=[${devices.mkString(", ")}]"
   } // stacked pipelines
-  case class QAnno(pipeline: Int, devices: Seq[Device], lastmodule: Boolean = false) extends Anno {
+  case class QAnno(pipeline: Int, devices: Seq[Device], islastmodule: Boolean = false) extends Anno {
     override def toString = s"Queued pipeline at ${pipeline} at devices=[${devices.mkString(", ")}]"
   } // queued pipelines
 
@@ -126,15 +126,7 @@ trait FixedSizeDistributedTensorBaseTypeLess {
   }
 
   def MODULE(anno:Anno, f: => TENSOR)(implicit __pos: SourceContext): MODULE = {
-    val an = anno match {
-      case a @ NAnno => a
-      case a @ SAnno(_,_,_) => throw new Exception(s"Annotation $a is not an Module Annotation")
-      case a @ MAnno(devices, lastmodule) => a
-      case a @ KAnno(pipeline, devices, lastmodule) => a
-      case a @ QAnno(pipeline, devices, lastmodule) => a
-      case _ => throw new Exception(s"Annotation $anno is not supported")
-    }
-    new MODULE(Adapter.g.reflectWrite("module", C(an), Adapter.g.reify(f.x))(Adapter.CTRL))
+    new MODULE(Adapter.g.reflectWrite("module", C(anno), Adapter.g.reify(f.x))(Adapter.CTRL)).withSource(__pos)
   }
 
   val moduleTensorMap = new mutable.HashMap[Backend.Sym, TENSOR]
@@ -148,9 +140,16 @@ trait FixedSizeDistributedTensorBaseTypeLess {
 
     def et: Manifest[_] = if (useOldMetadata) Adapter.oldTypeMap(x) else Adapter.typeMap(x)
 
-    val annotation: Anno = gc.get(x.asInstanceOf[Backend.Sym]) match {
-        case Some(Node(_, "module", Backend.Const(manno:Anno)::(b:Block)::_, _)) => manno
-        case a => throw new Exception(s"Node $a is not a Module node")
+    val (pipeline, annotation, devices, islastmodule) = gc.get(x.asInstanceOf[Backend.Sym]) match {
+        case Some(Node(_, "module", Backend.Const(manno:Anno)::(b:Block)::_, _)) => manno match {
+          case a @ NAnno => throw new Exception(s"Annotation $a is not an Module Annotation")
+          case a @ SAnno(_,_,_) => throw new Exception(s"Annotation $a is not an Module Annotation")
+          case a @ MAnno(devices, islastmodule) => (1, a, devices, islastmodule)
+          case a @ KAnno(pipeline, devices, islastmodule) => (pipeline, a, devices, islastmodule)
+          case a @ QAnno(pipeline, devices, islastmodule) => throw new Exception(s"Queued pipeline currently not supported")
+          case a => throw new Exception(s"Annotation $a is not supported")
+        }
+        case m => throw new Exception(s"Node $m is not a Module node")
     }
 
     def train(iter: Int)(implicit __pos: SourceContext) = {
@@ -372,7 +371,7 @@ trait FixedSizeDistributedTensorOpsBase extends Dsl {
   /// Typed Module Frontend
   class Module[+T]
   def module[T:Manifest](f: => Rep[Tensor[T]])(implicit __pos: SourceContext) = {
-    Wrap[Module[T]](MODULE(NAnno, new TENSOR(Unwrap(f))).x)
+    Wrap[Module[T]](MODULE(MAnno(List(), islastmodule = true), new TENSOR(Unwrap(f))).x)
   }
 
   def module[T:Manifest](anno: Anno)(f: => Rep[Tensor[T]])(implicit __pos: SourceContext) = {

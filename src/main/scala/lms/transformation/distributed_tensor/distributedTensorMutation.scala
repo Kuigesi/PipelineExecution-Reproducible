@@ -22,7 +22,10 @@ trait FixedSizeDistributedTensorMutationTypeLess extends FixedSizeDistributedTen
       withSource(pos).withEleType(m)
     val (resultType: TensorType, annotation: Anno, length:Int) = gc.get(x.asInstanceOf[Backend.Sym]) match {
       case Some(Node(_, s, Backend.Const(tt: TensorType)::Backend.Const(anno:Anno)::Backend.Const(l:Int)::_, _))
-        if s.startsWith("tensorarray_") => (tt, anno, l)
+        if s.startsWith("tensorarray_") => {
+          if (l < 1) throw new Exception(s"Tensor Array $x has length less than 1")
+          (tt, anno, l)
+        }
       case a => throw new Exception(s"Node $a is not an Tensor Array node")
     }
 

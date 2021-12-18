@@ -81,7 +81,7 @@ class PipelineExecutionTensorTest extends TutorialFunSuite {
           input * weight
         }
         model.train(10);
-        val model2 = module (KAnno(3, List(GPU(2), GPU(3)), lastmodule = true)) {
+        val model2 = module (KAnno(3, List(GPU(2), GPU(3)), islastmodule = true)) {
           val input2 = Tensor.input[Float](shape=Seq(32,32), name="input2", splitDim=0, splitTo=List(GPU(2), GPU(3)))
           // this is still hacky :(
           implicit val anno2 = input2.anno

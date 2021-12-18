@@ -44,14 +44,18 @@ class DistributeTensor2MPI_NCCLAnalysis extends Traverser {
         case Node(s, op, _, _) if cudnn_ops.exists(op.startsWith) =>
             hasCudnn = true
             super.traverse(n)
-        case Node(s, "module", Backend.Const(manno @ NAnno)::(b @ Block(in, y, ein, eff))::_, _) => throw new Exception(s"Single module should not arrive here")
-        case Node(s, "module", Backend.Const(manno:KAnno)::(b @ Block(in, y, ein, eff))::_, _) => {
+        case Node(s, "module", Backend.Const(manno:Anno)::(b @ Block(in, y, ein, eff))::_, _) => {
+          val devices = manno match {
+            case a @ MAnno(devices, islastmodule) => devices
+            case a @ KAnno(pipeline, devices, islastmodule) => devices
+            case _: QAnno => throw new Exception(s"Queued pipeline currently not supported")
+            case _ => throw new Exception(s"Not module annotation")
+          }
           curModule = s
-          modulemap(s) = (modulecount, manno.devices.size)
-          modulecount += manno.devices.size
+          modulemap(s) = (modulecount, devices.size)
+          modulecount += devices.size
           super.traverse(n)
         }
-        case Node(s, "module", Backend.Const(manno:QAnno)::(b @ Block(in, y, ein, eff))::_, _) => throw new Exception(s"Queued pipeline currently not supported")
         case Node(s, "tensor_send", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) =>
           sendmap(tag) = curModule
         case Node(s, "tensor_recv", Backend.Const(tt:TensorType)::Backend.Const(anno: Anno)::Backend.Const(tag:String)::(x:Backend.Sym)::_, _) =>

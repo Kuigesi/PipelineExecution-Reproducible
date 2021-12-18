@@ -347,18 +347,31 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
       finalize_mpi_nccl
       Backend.Const(())
 
-    case Node(s, "module", Backend.Const(manno @ NAnno)::(b @ Block(in, y, ein, eff))::_, _) => throw new Exception(s"Single module should not arrive here")
-
-    case Node(s, "module", Backend.Const(manno:KAnno)::(b @ Block(in, y, ein, eff))::_, _) => {
+    case Node(s, "module", Backend.Const(manno: Anno)::(b @ Block(in, y, ein, eff))::_, _) => {
+      //val module = new MODULE(s, true)
       implicit val pos: SourceContext = Adapter.oldSourceMap(s)
-      curModule = s
-      IF (globalNCCLRank >= modulemap(s)._1 && (globalNCCLRank < modulemap(s)._1 + modulemap(s)._2)) {
+      if (modulemap == null) {
         traverse(b)
-        UNIT(Backend.Const(()))
-      } { UNIT(Backend.Const(())) }.x
+        UNIT(Backend.Const(())).x
+      } else {
+        curModule = s
+        IF (globalNCCLRank >= modulemap(s)._1 && (globalNCCLRank < modulemap(s)._1 + modulemap(s)._2)) {
+          traverse(b)
+          UNIT(Backend.Const(()))
+        } { UNIT(Backend.Const(())) }.x
+      }
     }
 
-    case Node(s, "module", Backend.Const(manno:QAnno)::(b @ Block(in, y, ein, eff))::_, _) => throw new Exception(s"Queued pipeline currently not supported")
+    //case Node(s, "module", Backend.Const(manno:KAnno)::(b @ Block(in, y, ein, eff))::_, _) => {
+    //  implicit val pos: SourceContext = Adapter.oldSourceMap(s)
+    //  curModule = s
+    //  IF (globalNCCLRank >= modulemap(s)._1 && (globalNCCLRank < modulemap(s)._1 + modulemap(s)._2)) {
+    //    traverse(b)
+    //    UNIT(Backend.Const(()))
+    //  } { UNIT(Backend.Const(())) }.x
+    //}
+//
+    //case Node(s, "module", Backend.Const(manno:QAnno)::(b @ Block(in, y, ein, eff))::_, _) => throw new Exception(s"Queued pipeline currently not supported")
 
     case Node(s, "tensor_weight", Backend.Const(tt: TensorType)::Backend.Const(anno: Anno)::Backend.Const(filenameFormat:String)::(filenameArgs:List[Backend.Exp]), _) =>
       val sourceTensor = new TENSOR(s, useOldMetadata = true)
@@ -452,7 +465,7 @@ abstract class DistributeTensor2MPI_NCCLBase extends Transformer with MPIOps wit
       analysis.apply(graph)
       hasCublas = analysis.hasCublas
       hasCudnn = analysis.hasCudnn
-      modulemap = if (!analysis.modulemap.isEmpty) analysis.modulemap.toMap else null
+      modulemap = if (analysis.modulemap.size > 1) analysis.modulemap.toMap else null
       sendmap = if (!analysis.sendmap.isEmpty) analysis.sendmap.toMap else null
       recvmap = if (!analysis.recvmap.isEmpty) analysis.recvmap.toMap else null
       if (modulemap != null) {
