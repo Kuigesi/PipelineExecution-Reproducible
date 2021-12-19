@@ -110,6 +110,9 @@ void Snippet(int x0) {
   cudnnHandle_t x13;
   CUDNNCHECK(cudnnCreate(&x13));
   // end setting up the CUDNN environment
+
+  cudaEvent_t start_event;
+  cudaEvent_t finish_event;
   if (x12 >= 0 && x12 < 2) {
     // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
@@ -213,78 +216,78 @@ void Snippet(int x0) {
     CUDA_CALL(cudaMalloc(&x37, (size_t)(73984 * sizeof(float))));
     x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x37, 0, 73984);
     // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x38 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x38, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x38, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x38, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x38, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x39 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x39, (size_t)(262144 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x39, 0, 262144);
-    // end initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x39, (size_t)(131072 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x39, 0, 131072);
+    // end initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x40 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x40, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x40, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x40, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x40, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x41 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x41, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x41, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x41, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x41, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x42 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x42, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x42, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x42, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x42, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x43 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x43, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x43, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x43, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x43, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x44 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x44, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x44, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x44, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x44, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x45 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x45, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x45, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x45, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x45, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x46 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x46, (size_t)(262144 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x46, 0, 262144);
-    // end initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x46, (size_t)(131072 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x46, 0, 131072);
+    // end initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x47 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x47, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x47, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x47, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x47, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x48 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x48, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x48, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x48, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x48, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x49 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x49, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x49, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x49, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x49, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     int x50 = 0;
     float* x51 = (float*)malloc(0 * sizeof(float));
     CUDA_CALL(cudaMalloc(&x51, (size_t)(32768 * sizeof(float))));
@@ -537,9 +540,14 @@ void Snippet(int x0) {
     cudnnGetConvolutionBackwardFilterWorkspaceSize(x13, x136, x135, x138, x152, x208, &x209);
     float* x210 = (float*)malloc(0 * sizeof(float));
     CUDA_CALL(cudaMalloc(&x210, (size_t)x209));
-    while (x50 != 5) {
+
+    MPICHECK(MPI_Barrier(MPI_COMM_WORLD));
+    CUDA_CALL(cudaEventCreate(&start_event));
+    CUDA_CALL(cudaEventCreate(&finish_event));
+    CUDA_CALL(cudaEventRecord(start_event));
+    while (x50 != 10) {
       int x220 = 0;
-      while (x220 != 8) {
+      while (x220 != 4) {
         int x221 = x220;
         int x222 = 32768 * x221;
         cudaMemcpy(x39 + x222, x51, (size_t)(32768 * sizeof(float)), cudaMemcpyDeviceToDevice);
@@ -585,7 +593,7 @@ void Snippet(int x0) {
         x220 = x220 + 1;
       }
       int x236 = 0;
-      while (x236 != 8) {
+      while (x236 != 4) {
         int x237 = x236;
         x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x107, 0, 8388608);
         x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x108, 0, 8388608);
@@ -883,78 +891,78 @@ void Snippet(int x0) {
     CUDA_CALL(cudaMalloc(&x279, (size_t)(73984 * sizeof(float))));
     x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x279, 0, 73984);
     // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x280 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x280, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x280, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x280, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x280, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x281 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x281, (size_t)(262144 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x281, 0, 262144);
-    // end initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x281, (size_t)(131072 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x281, 0, 131072);
+    // end initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x282 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x282, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x282, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x282, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x282, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x283 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x283, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x283, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x283, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x283, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x284 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x284, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x284, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x284, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x284, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x285 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x285, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x285, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x285, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x285, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x286 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x286, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x286, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x286, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x286, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x287 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x287, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x287, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x287, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x287, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x288 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x288, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x288, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x288, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x288, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x289 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x289, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x289, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x289, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x289, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x290 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x290, (size_t)(67108864 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x290, 0, 67108864);
-    // end initializing fixed GPU array of size 67108864 and type Float and device (pre-rename) x66
-    // begin initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x290, (size_t)(33554432 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x290, 0, 33554432);
+    // end initializing fixed GPU array of size 33554432 and type Float and device (pre-rename) x66
+    // begin initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
     float* x291 = (float*)malloc(0 * sizeof(float));
-    CUDA_CALL(cudaMalloc(&x291, (size_t)(262144 * sizeof(float))));
-    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x291, 0, 262144);
-    // end initializing fixed GPU array of size 262144 and type Float and device (pre-rename) x66
+    CUDA_CALL(cudaMalloc(&x291, (size_t)(131072 * sizeof(float))));
+    x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x291, 0, 131072);
+    // end initializing fixed GPU array of size 131072 and type Float and device (pre-rename) x66
     int x292 = 0;
     float* x293 = (float*)malloc(0 * sizeof(float));
     CUDA_CALL(cudaMalloc(&x293, (size_t)(32768 * sizeof(float))));
@@ -1217,9 +1225,14 @@ void Snippet(int x0) {
     cudnnGetConvolutionBackwardDataWorkspaceSize(x13, x372, x355, x358, x356, x434, &x435);
     float* x436 = (float*)malloc(0 * sizeof(float));
     CUDA_CALL(cudaMalloc(&x436, (size_t)x435));
-    while (x292 != 5) {
+
+    MPICHECK(MPI_Barrier(MPI_COMM_WORLD));
+    CUDA_CALL(cudaEventCreate(&start_event));
+    CUDA_CALL(cudaEventCreate(&finish_event));
+    CUDA_CALL(cudaEventRecord(start_event));
+    while (x292 != 10) {
       int x437 = 0;
-      while (x437 != 8) {
+      while (x437 != 4) {
         int x438 = x437;
         x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x293, 0, 32768);
         ncclRecv(x293, (size_t)32768, ncclFloat32, x294, x4, x5);
@@ -1267,7 +1280,7 @@ void Snippet(int x0) {
         x437 = x437 + 1;
       }
       int x453 = 0;
-      while (x453 != 8) {
+      while (x453 != 4) {
         int x454 = x453;
         x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x341, 0, 32768);
         x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x342, 0, 8388608);
@@ -1471,6 +1484,16 @@ void Snippet(int x0) {
       // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x66 with weight x2197, grad x2207, and momentum x2220
       x292 = x292 + 1;
     }
+  }
+  CUDA_CALL(cudaEventRecord(finish_event));
+  CUDA_CALL(cudaEventSynchronize(finish_event));
+  float runningtime = 0.0;
+  CUDA_CALL(cudaEventElapsedTime(&runningtime, start_event, finish_event));
+  float avgtime = 0.0;
+  MPI_Allreduce(&runningtime, &avgtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+  avgtime = (avgtime/x1)/1000;
+  if (0 == x2) {
+    printf("%f", avgtime);
   }
   NCCLCHECK(ncclCommDestroy(x11));
   NCCLCHECK(ncclCommDestroy(x4));

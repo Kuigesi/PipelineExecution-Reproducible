@@ -762,6 +762,13 @@ void Snippet(int x0) {
   cudnnGetConvolutionBackwardFilterWorkspaceSize(x7, x52, x55, x54, x53, x333, &x334);
   float* x335 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x335, (size_t)x334));
+
+  cudaEvent_t start_event;
+  cudaEvent_t finish_event;
+  MPICHECK(MPI_Barrier(MPI_COMM_WORLD));
+  CUDA_CALL(cudaEventCreate(&start_event));
+  CUDA_CALL(cudaEventCreate(&finish_event));
+  CUDA_CALL(cudaEventRecord(start_event));
   while (x50 != 40) {
     float x345 = 1.0;
     float x346 = 0.0;
@@ -1187,6 +1194,16 @@ void Snippet(int x0) {
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x47, x48, x49, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x472, grad x482, and momentum x495
     x50 = x50 + 1;
+  }
+  CUDA_CALL(cudaEventRecord(finish_event));
+  CUDA_CALL(cudaEventSynchronize(finish_event));
+  float runningtime = 0.0;
+  CUDA_CALL(cudaEventElapsedTime(&runningtime, start_event, finish_event));
+  float avgtime = 0.0;
+  MPI_Allreduce(&runningtime, &avgtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+  avgtime = (avgtime/x1)/1000;
+  if (0 == x2) {
+    printf("%f", avgtime);
   }
   NCCLCHECK(ncclCommDestroy(x4));
   CUDNNCHECK(cudnnDestroy(x7));

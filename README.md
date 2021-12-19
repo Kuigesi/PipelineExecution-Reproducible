@@ -1,15 +1,28 @@
-# lms-clean
+# Reproducible Experiment
 
-![Scala CI](https://github.com/TiarkRompf/lms-clean/workflows/Scala%20CI/badge.svg?branch=master)
+To reproduce the evaluation presented in the CS592 paper:
 
-![Image](https://67.media.tumblr.com/fff976b92c98b0977dcfb89119474165/tumblr_o5n9x9lnkV1ugyavxo1_500.jpg)
+First, login to the cuda server `cuda.cs.purdue.edu`, make sure you have access to this server
 
-“The allure of a full rewrite”
+```bash
+ssh username@cuda.cs.purdue.edu
+```
+Then, clone the code from github, and enter the repo directory
 
-Viktor Oliva
+```bash
+git clone git@github.com:Kuigesi/PipelineExecution-Reproducible.git
+cd PipelineExecution-Reproducible
+```
 
-Oil on canvas
+To conduct the Pipeline Execution evaluation, run
 
-c 1901-1903
+```bash
+bash ./runtest.sh
+```
+This will produce the following files:
+- `./benchmark/data/benchmark.csv`, which is the collected results of the running time of different parallel settigs.
 
-(from http://classicprogrammerpaintings.com/)
+
+- 2 figures `./benchmark/pictures/pipelineparallelruntime.pdf`, `./benchmark/pictures/pipelineparallelspeedup.pdf` will be plotted to illustrate the runtime and speed up of different parallel seetings.
+
+To check out the generated figures, the pdf file should be transfered to your local computer.

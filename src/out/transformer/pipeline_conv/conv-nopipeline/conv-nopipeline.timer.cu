@@ -110,6 +110,9 @@ void Snippet(int x0) {
   cudnnHandle_t x13;
   CUDNNCHECK(cudnnCreate(&x13));
   // end setting up the CUDNN environment
+
+  cudaEvent_t start_event;
+  cudaEvent_t finish_event;
   if (x12 >= 0 && x12 < 2) {
     // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x66
     CUDA_CALL(cudaSetDevice(x12));
@@ -450,6 +453,11 @@ void Snippet(int x0) {
     cudnnGetConvolutionBackwardFilterWorkspaceSize(x13, x40, x43, x42, x41, x191, &x192);
     float* x193 = (float*)malloc(0 * sizeof(float));
     CUDA_CALL(cudaMalloc(&x193, (size_t)x192));
+
+    MPICHECK(MPI_Barrier(MPI_COMM_WORLD));
+    CUDA_CALL(cudaEventCreate(&start_event));
+    CUDA_CALL(cudaEventCreate(&finish_event));
+    CUDA_CALL(cudaEventRecord(start_event));
     while (x38 != 40) {
       float x203 = 1.0;
       float x204 = 0.0;
@@ -1016,6 +1024,11 @@ void Snippet(int x0) {
     cudnnGetConvolutionBackwardDataWorkspaceSize(x13, x259, x261, x260, x258, x392, &x393);
     float* x394 = (float*)malloc(0 * sizeof(float));
     CUDA_CALL(cudaMalloc(&x394, (size_t)x393));
+
+    MPICHECK(MPI_Barrier(MPI_COMM_WORLD));
+    CUDA_CALL(cudaEventCreate(&start_event));
+    CUDA_CALL(cudaEventCreate(&finish_event));
+    CUDA_CALL(cudaEventRecord(start_event));
     while (x255 != 40) {
       x16<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x256, 0, 32768);
       ncclRecv(x256, (size_t)32768, ncclFloat32, x257, x4, x5);
@@ -1241,6 +1254,16 @@ void Snippet(int x0) {
       // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x66 with weight x1876, grad x1886, and momentum x1899
       x255 = x255 + 1;
     }
+  }
+  CUDA_CALL(cudaEventRecord(finish_event));
+  CUDA_CALL(cudaEventSynchronize(finish_event));
+  float runningtime = 0.0;
+  CUDA_CALL(cudaEventElapsedTime(&runningtime, start_event, finish_event));
+  float avgtime = 0.0;
+  MPI_Allreduce(&runningtime, &avgtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+  avgtime = (avgtime/x1)/1000;
+  if (0 == x2) {
+    printf("%f", avgtime);
   }
   NCCLCHECK(ncclCommDestroy(x11));
   NCCLCHECK(ncclCommDestroy(x4));
