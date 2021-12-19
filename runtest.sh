@@ -63,7 +63,7 @@ function setup() {
 
 function compile() {
   nvcc -o $1  $1.cu \
-  -I ~/workspace/lms-clean-test/src/main/resources/headers \
+  -I ../src/main/resources/headers \
   -I /usr/lib/x86_64-linux-gnu/openmpi/include \
   -L /usr/lib/x86_64-linux-gnu/openmpi/lib64 \
   -l nccl \

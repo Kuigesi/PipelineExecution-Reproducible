@@ -10,7 +10,7 @@ ssh username@cuda.cs.purdue.edu
 Then, clone the code from github, and enter the repo directory
 
 ```bash
-git clone git@github.com:Kuigesi/PipelineExecution-Reproducible.git
+git clone https://github.com/Kuigesi/PipelineExecution-Reproducible.git
 cd PipelineExecution-Reproducible
 ```
 
