@@ -16,6 +16,7 @@ Emitting C Generated Code
 #include <stdbool.h>
 #include "mpi_header.h"
 #include "scanner_header.h"
+#include <assert.h>
 /************* Functions **************/
 __global__ void x10(float* x11, float x12, int x13) {
   // begin generating kernel function for FILL of type Float
@@ -74,7 +75,7 @@ __global__ void x336(float* x337, float* x338, float* x339, int x340) {
   // end generating kernel function for SGD of type Float
 }
 /**************** Snippet ****************/
-void Snippet(int x0) {
+void Snippet(int devices[4]) {
   // begin setting up the MPI/NCCL environment
   int x1 = 0;
   int x2 = 0;
@@ -82,7 +83,8 @@ void Snippet(int x0) {
   MPICHECK(MPI_Comm_rank(MPI_COMM_WORLD, &x2));
   MPICHECK(MPI_Comm_size(MPI_COMM_WORLD, &x1));
   MPICHECK(MPI_Barrier(MPI_COMM_WORLD));
-  CUDA_CALL(cudaSetDevice(x2));
+
+  CUDA_CALL(cudaSetDevice(devices[x2]));
   ncclUniqueId x3;
   NCCLCHECK(ncclGetUniqueId(&x3));
   MPICHECK(MPI_Bcast(&x3, NCCL_UNIQUE_ID_BYTES, MPI_CHAR, 0, MPI_COMM_WORLD));
@@ -90,212 +92,212 @@ void Snippet(int x0) {
   NCCLCHECK(ncclCommInitRank(&x4, x1, x3, x2));
   cudaStream_t x5;
   CUDA_CALL(cudaStreamCreateWithFlags(&x5, cudaStreamNonBlocking));
-  int x6 = x2;
+
   // end setting up the MPI/NCCL environment
   // begin setting up the CUDNN environment
   cudnnHandle_t x7;
   CUDNNCHECK(cudnnCreate(&x7));
   // end setting up the CUDNN environment
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x8 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x8, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x9 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x9, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x9, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x16 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x16, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x16, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x17 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x17, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x18 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x18, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x18, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x19 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x19, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x19, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x20 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x20, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x21 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x21, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x21, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x22 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x22, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x22, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x23 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x23, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x24 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x24, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x24, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x25 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x25, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x25, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x26 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x26, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x27 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x27, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x27, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x28 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x28, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x28, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x29 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x29, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x30 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x30, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x30, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x31 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x31, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x31, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x32 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x32, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x33 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x33, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x33, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x34 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x34, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x34, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x35 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x35, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x36 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x36, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x36, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x37 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x37, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x37, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x38 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x38, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x39 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x39, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x39, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x40 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x40, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x40, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x41 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x41, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x42 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x42, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x42, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x43 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x43, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x43, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x44 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x44, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x45 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x45, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x45, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x46 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x46, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x46, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x47 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x47, (size_t)(73984 * sizeof(float))));
   // end initializing random GPU array of size 73984 and type Float at device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x48 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x48, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x48, 0, 73984);
   // end initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
   // begin initializing fixed GPU array of size 73984 and type Float and device (pre-rename) x39
-  CUDA_CALL(cudaSetDevice(x6));
+
   float* x49 = (float*)malloc(0 * sizeof(float));
   CUDA_CALL(cudaMalloc(&x49, (size_t)(73984 * sizeof(float))));
   x10<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x49, 0, 73984);
@@ -844,7 +846,7 @@ void Snippet(int x0) {
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x170, x141, x171, 32768);
     // end computing RELU_GRAD on GPU for size 32768 and type Float at device (pre-rename) x39 with left_operand x1495 and right_operand x1158
     // begin computing ACCUM on GPU for size 32768 and type Float at device (pre-rename) x39 with base_operand x1482 and addition_operand x1508
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x169, x171, 32768);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -856,7 +858,7 @@ void Snippet(int x0) {
     ncclAllReduce(x187, x187, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x482 and addition_operand x1592
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x48, x187, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -865,12 +867,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x371, x98, x47, x52, x169, x54, x196, x198, x197, &x372, x55, x193));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1469 and addition_operand x1644
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x168, x193, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x168, x134, x199, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1469 and right_operand x1107
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1456 and addition_operand x1689
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x167, x199, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -882,7 +884,7 @@ void Snippet(int x0) {
     ncclAllReduce(x200, x200, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x446 and addition_operand x1709
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x45, x200, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -891,12 +893,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x375, x53, x44, x55, x167, x54, x209, x211, x210, &x376, x55, x206));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1443 and addition_operand x1761
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x166, x206, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x166, x127, x212, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1443 and right_operand x1056
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1430 and addition_operand x1806
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x165, x212, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -908,7 +910,7 @@ void Snippet(int x0) {
     ncclAllReduce(x213, x213, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x410 and addition_operand x1826
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x42, x213, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -917,12 +919,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x379, x53, x41, x55, x165, x54, x222, x224, x223, &x380, x55, x219));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1417 and addition_operand x1878
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x164, x219, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x164, x120, x225, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1417 and right_operand x1005
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1404 and addition_operand x1923
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x163, x225, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -934,7 +936,7 @@ void Snippet(int x0) {
     ncclAllReduce(x226, x226, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x374 and addition_operand x1943
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x39, x226, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -943,12 +945,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x383, x53, x38, x55, x163, x54, x235, x237, x236, &x384, x55, x232));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1391 and addition_operand x1995
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x162, x232, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x162, x113, x238, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1391 and right_operand x954
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1378 and addition_operand x2040
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x161, x238, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -960,7 +962,7 @@ void Snippet(int x0) {
     ncclAllReduce(x239, x239, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x338 and addition_operand x2060
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x36, x239, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -969,12 +971,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x387, x53, x35, x55, x161, x54, x248, x250, x249, &x388, x55, x245));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1365 and addition_operand x2112
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x160, x245, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x160, x106, x251, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1365 and right_operand x903
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1352 and addition_operand x2157
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x159, x251, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -986,7 +988,7 @@ void Snippet(int x0) {
     ncclAllReduce(x252, x252, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x302 and addition_operand x2177
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x33, x252, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -995,12 +997,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x391, x53, x32, x55, x159, x54, x261, x263, x262, &x392, x52, x258));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 32768 and type Float at device (pre-rename) x39 with base_operand x1339 and addition_operand x2229
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x158, x258, 32768);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x158, x99, x264, 32768);
     // end computing RELU_GRAD on GPU for size 32768 and type Float at device (pre-rename) x39 with left_operand x1339 and right_operand x852
     // begin computing ACCUM on GPU for size 32768 and type Float at device (pre-rename) x39 with base_operand x1326 and addition_operand x2274
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x157, x264, 32768);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -1012,7 +1014,7 @@ void Snippet(int x0) {
     ncclAllReduce(x265, x265, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x266 and addition_operand x2294
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x30, x265, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -1021,12 +1023,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x395, x98, x29, x52, x157, x54, x274, x276, x275, &x396, x55, x271));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1313 and addition_operand x2346
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x156, x271, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x156, x91, x277, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1313 and right_operand x792
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1300 and addition_operand x2391
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x155, x277, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -1038,7 +1040,7 @@ void Snippet(int x0) {
     ncclAllReduce(x278, x278, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x230 and addition_operand x2411
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x27, x278, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -1047,12 +1049,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x399, x53, x26, x55, x155, x54, x287, x289, x288, &x400, x55, x284));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1287 and addition_operand x2463
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x154, x284, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x154, x84, x290, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1287 and right_operand x741
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1274 and addition_operand x2508
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x153, x290, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -1064,7 +1066,7 @@ void Snippet(int x0) {
     ncclAllReduce(x291, x291, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x194 and addition_operand x2528
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x24, x291, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -1073,12 +1075,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x403, x53, x23, x55, x153, x54, x300, x302, x301, &x404, x55, x297));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1261 and addition_operand x2580
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x152, x297, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x152, x77, x303, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1261 and right_operand x690
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1248 and addition_operand x2625
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x151, x303, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -1090,7 +1092,7 @@ void Snippet(int x0) {
     ncclAllReduce(x304, x304, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x158 and addition_operand x2645
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x21, x304, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -1099,12 +1101,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x407, x53, x20, x55, x151, x54, x313, x315, x314, &x408, x55, x310));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1235 and addition_operand x2697
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x150, x310, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x150, x70, x316, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1235 and right_operand x639
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1222 and addition_operand x2742
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x149, x316, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -1116,7 +1118,7 @@ void Snippet(int x0) {
     ncclAllReduce(x317, x317, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x122 and addition_operand x2762
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x18, x317, 73984);
     // end allocating gpu array for convolution backward data workspace
     // begin convolution backward data pass
@@ -1125,12 +1127,12 @@ void Snippet(int x0) {
     CUDNNCHECK(cudnnConvolutionBackwardData(x7, &x411, x53, x17, x55, x149, x54, x326, x328, x327, &x412, x55, x323));
     // end convolution backward data pass
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1209 and addition_operand x2814
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x148, x323, 8388608);
     x172<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x148, x56, x329, 8388608);
     // end computing RELU_GRAD on GPU for size 8388608 and type Float at device (pre-rename) x39 with left_operand x1209 and right_operand x559
     // begin computing ACCUM on GPU for size 8388608 and type Float at device (pre-rename) x39 with base_operand x1196 and addition_operand x2859
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x147, x329, 8388608);
     // end allocating gpu array for convolution backward filter workspace
     // begin convolution backward filter pass
@@ -1142,55 +1144,55 @@ void Snippet(int x0) {
     ncclAllReduce(x330, x330, (size_t)73984, ncclFloat32, ncclSum, x4, x5);
     CUDA_CALL(cudaStreamSynchronize(x5));
     // begin computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x59 and addition_operand x2879
-    CUDA_CALL(cudaSetDevice(x6));
+
     x180<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x9, x330, 73984);
     // end computing ACCUM on GPU for size 73984 and type Float at device (pre-rename) x39 with base_operand x59 and addition_operand x2879
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x49, grad x59, and momentum x99
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x8, x9, x16, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x49, grad x59, and momentum x99
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x112, grad x122, and momentum x135
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x17, x18, x19, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x112, grad x122, and momentum x135
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x148, grad x158, and momentum x171
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x20, x21, x22, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x148, grad x158, and momentum x171
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x184, grad x194, and momentum x207
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x23, x24, x25, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x184, grad x194, and momentum x207
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x220, grad x230, and momentum x243
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x26, x27, x28, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x220, grad x230, and momentum x243
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x256, grad x266, and momentum x279
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x29, x30, x31, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x256, grad x266, and momentum x279
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x292, grad x302, and momentum x315
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x32, x33, x34, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x292, grad x302, and momentum x315
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x328, grad x338, and momentum x351
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x35, x36, x37, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x328, grad x338, and momentum x351
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x364, grad x374, and momentum x387
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x38, x39, x40, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x364, grad x374, and momentum x387
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x400, grad x410, and momentum x423
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x41, x42, x43, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x400, grad x410, and momentum x423
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x436, grad x446, and momentum x459
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x44, x45, x46, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x436, grad x446, and momentum x459
     // begin computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x472, grad x482, and momentum x495
-    CUDA_CALL(cudaSetDevice(x6));
+
     x336<<<dim3(28, 1, 1), dim3(512, 1, 1)>>>(x47, x48, x49, 73984);
     // end computing SGD on GPU for size 73984 and type Float at device (pre-name) x39 with weight x472, grad x482, and momentum x495
     x50 = x50 + 1;
@@ -1213,10 +1215,23 @@ void Snippet(int x0) {
 End of C Generated Code
 *******************************************/
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
+  if (argc != 5) {
     printf("usage: %s <arg>\n", argv[0]);
     return 0;
   }
-  Snippet(atoi(argv[1]));
+  int devices[4];
+  for (int i=0; i<4; i++) {
+    int id = atoi(argv[i+1]);
+    assert(id >= 0 && id < 8);
+    devices[i] = id;
+  }
+  for (int i=0; i<3; i++) {
+    for (int j=i+1; j<4; j++) {
+      if (devices[i] == devices[j]) {
+        assert("device id should be different");
+      }
+    }
+  }
+  Snippet(devices);
   return 0;
 }

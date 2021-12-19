@@ -1,5 +1,18 @@
 #!/bin/bash
-
+device0=0
+device1=1
+device2=2
+device3=3
+if [ $# -ne 0 -a $# -ne 4 ]; then
+echo "Please provide 4 device IDs"
+exit
+fi
+if [ $# -eq 4 ]; then
+device0=$1
+device1=$2
+device2=$3
+device3=$4
+fi
 function load() {
   echo "loading"
   module load slurm;
@@ -60,7 +73,7 @@ function compile() {
 }
 
 function sexec() {
-  mpiexec --oversubscribe -np $1 $2 $3
+  mpiexec --oversubscribe -np $*
 }
 
 # compile and run the generated test code
@@ -75,7 +88,7 @@ function test() {
   if [ $? -eq 0 ]; then
     echo "testing   -- ${outputname}"
     #sexec $testname 0
-    res=$(sexec 2 $testname 0)
+    res=$(sexec 2 $testname $device0 $device1 $device2 $device3)
     printf "Training loop time: ${res} sec\n\n"
     printf "${outputname},${res}\n" >> ${csvfile}
   fi
@@ -87,7 +100,7 @@ function test() {
   if [ $? -eq 0 ]; then
     echo "testing   -- ${outputname}"
     #sexec $testname 0
-    res=$(sexec 4 $testname 0)
+    res=$(sexec 4 $testname $device0 $device1 $device2 $device3)
     printf "Training loop time: ${res} sec\n\n"
     printf "${outputname},${res}\n" >> ${csvfile}
   fi
@@ -99,7 +112,7 @@ function test() {
   if [ $? -eq 0 ]; then
     echo "testing   -- ${outputname}"
     #sexec $testname 0
-    res=$(sexec 4 $testname 0)
+    res=$(sexec 4 $testname $device0 $device1 $device2 $device3)
     printf "Training loop time: ${res} sec\n\n"
     printf "${outputname},${res}\n" >> ${csvfile}
   fi
@@ -111,7 +124,7 @@ function test() {
   if [ $? -eq 0 ]; then
     echo "testing   -- ${outputname}"
     #sexec $testname 0
-    res=$(sexec 4 $testname 0)
+    res=$(sexec 4 $testname $device0 $device1 $device2 $device3)
     printf "Training loop time: ${res} sec\n\n"
     printf "${outputname},${res}\n" >> ${csvfile}
   fi
@@ -123,7 +136,7 @@ function test() {
   if [ $? -eq 0 ]; then
     echo "testing   -- ${outputname}"
     #sexec $testname 0
-    res=$(sexec 4 $testname 0)
+    res=$(sexec 4 $testname $device0 $device1 $device2 $device3)
     printf "Training loop time: ${res} sec\n\n"
     printf "${outputname},${res}" >> ${csvfile}
   fi
