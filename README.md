@@ -14,12 +14,14 @@ git clone https://github.com/Kuigesi/PipelineExecution-Reproducible.git
 cd PipelineExecution-Reproducible
 ```
 
-Before we run the evaluation, we need to check the GPU usage by
+Before we run the evaluation, we need to check the GPU usage, our evaluation requires 4 GPUs and will occupy at most 5GB memory per GPU.
+
+To check the GPU usage, run
 ```bash
 nvidia-smi
 ```
 
-The evaluation in our paper uses the first 4 GPUs (0,1,2,3), to reproduce the evaluation in our paper, make sure the first 4 GPUs are all available and not occupied by other users, then run
+The evaluation in our paper uses the first 4 GPUs (0,1,2,3), to reproduce the evaluation in our paper, make sure the first 4 GPUs are all available and all have sufficient free memory (5GB), then run
 ```bash
 bash ./runtest.sh
 ```
